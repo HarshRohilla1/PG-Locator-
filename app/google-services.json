@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "189210717029",
+    "project_id": "pg-locator-80761",
+    "storage_bucket": "pg-locator-80761.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189210717029:android:aff0c9e91612cede1b8f8c",
+        "android_client_info": {
+          "package_name": "com.example.pglocator"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJ6lxt09soA_nbGdsohu2ZBEZekTtlg8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
