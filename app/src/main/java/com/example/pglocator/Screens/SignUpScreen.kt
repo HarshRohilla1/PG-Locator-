@@ -17,17 +17,21 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.pglocator.AuthState
 import com.example.pglocator.AuthViewModel
 
 @Composable
@@ -35,7 +39,20 @@ fun SignUpScreen(modifier: Modifier=Modifier,navController: NavController,authVi
 {
     var username by rememberSaveable{ mutableStateOf("") }
     var password by rememberSaveable{ mutableStateOf("") }
+    val authState = authViewModel.authState.observeAsState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    LaunchedEffect(authState.value) {
+        when(authState.value) {
+            is AuthState.Authenticated -> navController.navigate("homepage")
+            is AuthState.Error -> Toast.makeText(context,
+                (authState.value as AuthState.Error).message,Toast.LENGTH_LONG).show()
+
+            else -> Unit
+        }
+
+    }
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -77,16 +94,9 @@ fun SignUpScreen(modifier: Modifier=Modifier,navController: NavController,authVi
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            if(username=="harsh"&&password=="Harsh")
-            {
-                //navController.navigate("instagramcategories")
-
-            }
-            else{
-                Toast.makeText(navController.context,"Invalid Credentials", Toast.LENGTH_SHORT).show()
-            }
-
-        }) {
+            authViewModel.SignUp(username,password)
+        },
+            enabled = authState.value != AuthState.Loading) {
 
             Text(text = "Sign Up")
 
